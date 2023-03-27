@@ -6,6 +6,9 @@
 
 int main(int argc, char **argv) {
     printf("hello!\n");
-    rootInit();
+
+    cwgRootFrame *root = cwgRootInit("gui window", 400, 400);
+    cwgRootMainloop(root);
+
     return 0;
 }
