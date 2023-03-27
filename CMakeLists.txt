@@ -8,6 +8,7 @@ set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
 
 # EXEC list with all of sources to add by "add_executable" 
 list(APPEND EXEC ${PATH_SRC}/main.c)
+# list(APPEND EXEC ${PATH_SRC}/root.c)
 
 # add sdl
 include_directories("${PROJECT_SOURCE_DIR}/SDL")
@@ -20,7 +21,7 @@ add_executable(classicWG ${EXEC})
 # copy sdl dll file into build folder; it does not do it by default
 # taken from https://github.com/libsdl-org/SDL/issues/6399
 add_custom_command(TARGET classicWG POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:SDL2::SDL2>" "$<TARGET_FILE_DIR:classicWG>")
+                    COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:SDL2::SDL2>" "$<TARGET_FILE_DIR:classicWG>" VERBOSE)
 
 
 # copy resources folder to build dir
