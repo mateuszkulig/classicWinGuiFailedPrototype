@@ -1,7 +1,7 @@
 #include "SDL.h"
 
-#define CWG_DEFAULT_WINDOW_HEIGHT   160
-#define CWG_DEFAULT_WINDOW_WIDTH    90
+#define CWG_DEFAULT_WINDOW_HEIGHT   90
+#define CWG_DEFAULT_WINDOW_WIDTH    160
 
 // the main frame in window
 typedef struct cwgRootFrame {
