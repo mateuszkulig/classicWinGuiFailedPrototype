@@ -15,6 +15,7 @@ cwgRootFrame *cwgRootInit(char *title, int width, int height) {
 
     SDL_Init(SDL_INIT_VIDEO);
     root->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, root->width, root->height, SDL_WINDOW_SHOWN);
+    root->renderer = SDL_CreateRenderer(root->window, -1, 0);
     return root;
 }
 

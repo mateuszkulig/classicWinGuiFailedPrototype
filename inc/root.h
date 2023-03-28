@@ -5,9 +5,10 @@
 
 // the main frame in window
 typedef struct cwgRootFrame {
-    SDL_Window  *window;
-    int         width;
-    int         height;
+    SDL_Window      *window;
+    SDL_Renderer    *renderer;
+    int             width;
+    int             height;
 } cwgRootFrame;
 
 // initialize the root frame and window with specified title, width and height
