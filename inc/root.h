@@ -7,6 +7,7 @@
 typedef struct cwgRootFrame {
     SDL_Window      *window;
     SDL_Renderer    *renderer;
+    SDL_Rect        *background;
     int             width;
     int             height;
 } cwgRootFrame;

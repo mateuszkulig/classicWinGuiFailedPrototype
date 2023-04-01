@@ -14,8 +14,21 @@ cwgRootFrame *cwgRootInit(char *title, int width, int height) {
     }
 
     SDL_Init(SDL_INIT_VIDEO);
+
     root->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, root->width, root->height, SDL_WINDOW_SHOWN);
-    root->renderer = SDL_CreateRenderer(root->window, -1, 0);
+    root->renderer = SDL_CreateRenderer(root->window, -1, SDL_RENDERER_ACCELERATED);
+    
+    root->background = malloc(sizeof(SDL_Rect));
+    root->background->x = 0;
+    root->background->y = 0;
+    root->background->w = root->width;
+    root->background->h = root->height;
+
+    SDL_SetRenderDrawColor(root->renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(root->renderer, root->background);
+    
+    SDL_RenderPresent(root->renderer);
+
     return root;
 }
 
@@ -33,6 +46,8 @@ void cwgRootMainloop(cwgRootFrame *root) {
 }
 
 void cwgDestroyRoot(cwgRootFrame *root) {
+    SDL_DestroyRenderer(root->renderer);
     SDL_DestroyWindow(root->window);
+    free(root->background);
     free(root);
 }
