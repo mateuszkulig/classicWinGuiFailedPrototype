@@ -20,6 +20,7 @@ struct cwgFrame {
     int autoheight;
     SDL_Rect *background;
     cwgFrame *children;
+    int childrenCount;
 };
 
 // the main frame in window
@@ -47,3 +48,6 @@ void cwgSetDefaultColor(cwgRootFrame *root);
 // create a new frame
 // width and height can be set to 0 - then their size will be auto scaled
 cwgFrame *cwgCreateFrame(int width, int height);
+
+// place a frame in the another frame
+void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column);

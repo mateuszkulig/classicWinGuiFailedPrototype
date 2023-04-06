@@ -78,6 +78,15 @@ cwgFrame *cwgCreateFrame(int width, int height) {
 
     result->background = malloc(sizeof(SDL_Rect));
     result->children = NULL;
+    result->childrenCount = 0;
     
     return result;
+}
+
+void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column) {
+    newFrame->row = row;
+    newFrame->column = column;
+
+    rootFrame->childrenCount++;
+    rootFrame->children = realloc(rootFrame->children, rootFrame->childrenCount * sizeof(cwgFrame));
 }
