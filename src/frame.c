@@ -61,3 +61,23 @@ cwgRootFrame *cwgRootInit(char *title, int width, int height) {
 
     return root;
 }
+
+cwgFrame *cwgCreateFrame(int width, int height) {
+    cwgFrame *result = malloc(sizeof(cwgFrame));
+    if (width) {
+        result->width = width;
+        result->autowidth = 0;
+    } else {
+        result->autowidth = 1;
+    }
+
+    if (height) {
+        result->height = height;
+        result->autoheight = 0;
+    }
+
+    result->background = malloc(sizeof(SDL_Rect));
+    result->children = NULL;
+    
+    return result;
+}

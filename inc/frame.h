@@ -44,3 +44,6 @@ void cwgDestroyRoot(cwgRootFrame *root);
 // set renderer color to default grey
 void cwgSetDefaultColor(cwgRootFrame *root);
 
+// create a new frame
+// width and height can be set to 0 - then their size will be auto scaled
+cwgFrame *cwgCreateFrame(int width, int height);
