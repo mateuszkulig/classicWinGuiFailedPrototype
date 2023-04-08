@@ -5,22 +5,30 @@
 #define CWG_DEFAULT_WINDOW_HEIGHT   90
 #define CWG_DEFAULT_WINDOW_WIDTH    160
 #define CWG_DEFAULT_COLOR_RGB       0xc0   
- 
+
+// color information - (r)ed, (g)reen, (b)lue, (a)lpha
+typedef struct cwgColor {
+    int r;
+    int g;
+    int b;
+    int a;
+} cwgColor;
 
 // just to include pointer to same struct inside
 typedef struct cwgFrame cwgFrame;
 // standard frame
 // autowidth and autoheight are booleans
 struct cwgFrame {
-    int row;
-    int column;
-    int width;
-    int height;
-    int autowidth;
-    int autoheight;
-    SDL_Rect *background;
-    cwgFrame *children;
-    int childrenCount;
+    int         row;
+    int         column;
+    int         width;
+    int         height;
+    int         autowidth;
+    int         autoheight;
+    SDL_Rect    *background;
+    cwgFrame    *children;
+    int         childrenCount;
+    cwgColor    *color;
 };
 
 // the main frame in window

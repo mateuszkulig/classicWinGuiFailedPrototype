@@ -79,6 +79,12 @@ cwgFrame *cwgCreateFrame(int width, int height) {
     result->background = malloc(sizeof(SDL_Rect));
     result->children = NULL;
     result->childrenCount = 0;
+
+    result->color = malloc(sizeof(cwgColor));
+    result->color->r = CWG_DEFAULT_COLOR_RGB;
+    result->color->g = CWG_DEFAULT_COLOR_RGB;
+    result->color->b = CWG_DEFAULT_COLOR_RGB;
+    result->color->a = SDL_ALPHA_OPAQUE;
     
     return result;
 }
