@@ -28,12 +28,12 @@ int main(int argc, char **argv) {
     frame3->color->a = 255;
 
     cwgPlaceFrame(frame1, root->frame, 1, 1);
-    cwgPlaceFrame(frame2, root->frame, 2, 1);
     cwgPlaceFrame(frame3, root->frame, 3, 1);
+    cwgPlaceFrame(frame2, root->frame, 2, 1);
     
-    printf("1 frame x: %d,\tframe width: %d\n", frame1->x, frame1->width);
-    printf("2 frame x: %d,\tframe width: %d\n", frame2->x, frame2->width);
-    printf("3 frame x: %d,\tframe width: %d\n", frame3->x, frame3->width);
+    // printf("1 frame x: %d,\tframe width: %d\n", frame1->x, frame1->width);
+    // printf("2 frame x: %d,\tframe width: %d\n", frame2->x, frame2->width);
+    // printf("3 frame x: %d,\tframe width: %d\n", frame3->x, frame3->width);
 
     cwgRootMainloop(root);
 

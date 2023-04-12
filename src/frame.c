@@ -104,6 +104,7 @@ void cwgReplaceFrames(cwgFrame *root) {
     int autoSpace;
     int takenX = 0;
 
+    cwgSortFramesByRow(root);
     for (size_t i = 0; i<root->childrenCount; ++i) {
         if (root->children[i]->autowidth) {
             autoChildren++;
@@ -129,7 +130,25 @@ void cwgReplaceFrames(cwgFrame *root) {
             takenX += root->children[i]->width;
         }
     }
+}
 
+void cwgSortFramesByRow(cwgFrame *root) {
+    int         completed;
+    cwgFrame    *temp = NULL;
+
+    if (root->childrenCount < 2) {return;}
+    
+    do {
+        completed = 1;
+        for (size_t i=1; i<root->childrenCount; ++i) {
+            if (root->children[i]->row < root->children[i-1]->row) {
+                completed = 0;
+                temp = root->children[i];
+                root->children[i] = root->children[i-1];
+                root->children[i-1] = temp;
+            }
+        }
+    } while (!completed);
 }
 
 void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column) {
@@ -137,11 +156,10 @@ void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column)
     rootFrame->children = realloc(rootFrame->children, (rootFrame->childrenCount) * sizeof(cwgFrame*));
     rootFrame->children[rootFrame->childrenCount - 1] = newFrame;
 
-    cwgReplaceFrames(rootFrame);
-    
-
     newFrame->row = row;
     newFrame->column = column;
+
+    cwgReplaceFrames(rootFrame);
 
     newFrame->y = 0;
     newFrame->background->y = newFrame->y;;

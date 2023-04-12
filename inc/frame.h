@@ -67,3 +67,6 @@ void cwgUpdateRoot(cwgRootFrame *root);
 
 // change x, y, width and height of frames according to position and auto parameters
 void cwgReplaceFrames(cwgFrame *root);
+
+// sort frames in children array by row
+void cwgSortFramesByRow(cwgFrame *root);
