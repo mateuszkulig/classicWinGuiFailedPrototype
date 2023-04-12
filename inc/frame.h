@@ -21,12 +21,14 @@ typedef struct cwgFrame cwgFrame;
 struct cwgFrame {
     int         row;
     int         column;
+    int         x;
+    int         y;
     int         width;
     int         height;
     int         autowidth;
     int         autoheight;
     SDL_Rect    *background;
-    cwgFrame    *children;
+    cwgFrame    **children;
     int         childrenCount;
     cwgColor    *color;
 };
@@ -59,3 +61,6 @@ cwgFrame *cwgCreateFrame(int width, int height);
 
 // place a frame in the another frame
 void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column);
+
+// rerender all of the children and objects inside of root
+void cwgUpdateRoot(cwgRootFrame *root);

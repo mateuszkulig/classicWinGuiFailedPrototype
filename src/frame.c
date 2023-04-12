@@ -74,6 +74,8 @@ cwgFrame *cwgCreateFrame(int width, int height) {
     if (height) {
         result->height = height;
         result->autoheight = 0;
+    } else {
+        result->autoheight = 1;
     }
 
     result->background = malloc(sizeof(SDL_Rect));
@@ -90,9 +92,49 @@ cwgFrame *cwgCreateFrame(int width, int height) {
 }
 
 void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column) {
+    int x = 0, y = 0;
+
+    if (rootFrame->childrenCount == 0) {
+        x = 0;
+    // } else if (row > rootFrame->childrenCount) {
+    //         printf("got in the loop\n");
+    //         x += rootFrame->children[rootFrame->childrenCount - 1]->x;
+    //         x += rootFrame->children[rootFrame->childrenCount - 1]->width;
+    } else {
+        for (size_t i=0; i<row-1; ++i) {
+            x += rootFrame->children[i]->width;
+        }
+    }
+
     newFrame->row = row;
     newFrame->column = column;
+    newFrame->x = x;
+    newFrame->y = 0;
+
+    newFrame->background->x = newFrame->x;
+    newFrame->background->y = newFrame->y;
+    newFrame->background->w = newFrame->width;
+    newFrame->background->h = newFrame->height;
+
 
     rootFrame->childrenCount++;
-    rootFrame->children = realloc(rootFrame->children, rootFrame->childrenCount * sizeof(cwgFrame));
+    rootFrame->children = realloc(rootFrame->children, (rootFrame->childrenCount) * sizeof(cwgFrame*));
+    rootFrame->children[rootFrame->childrenCount - 1] = newFrame;
+}
+
+void cwgUpdateRoot(cwgRootFrame *root) {
+    for (size_t i=0; i<(root->frame->childrenCount); ++i) {
+
+        // printf("%d\n", root->frame->children[i].width);
+
+        SDL_SetRenderDrawColor(
+            root->renderer,
+            root->frame->children[i]->color->r,
+            root->frame->children[i]->color->g,
+            root->frame->children[i]->color->b,
+            root->frame->children[i]->color->a
+        );
+        SDL_RenderFillRect(root->renderer, root->frame->children[i]->background);
+        SDL_RenderPresent(root->renderer);
+    }
 }
