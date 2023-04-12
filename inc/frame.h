@@ -64,3 +64,5 @@ void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column)
 
 // rerender all of the children and objects inside of root
 void cwgUpdateRoot(cwgRootFrame *root);
+
+void cwgReplaceFrames(cwgFrame *root);

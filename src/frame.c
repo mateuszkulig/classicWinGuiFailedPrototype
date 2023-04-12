@@ -10,6 +10,7 @@ void cwgRootMainloop(cwgRootFrame *root) {
                 quit = 1;
             }
         }
+        cwgUpdateRoot(root);
     }
 }
 
@@ -48,6 +49,8 @@ cwgRootFrame *cwgRootInit(char *title, int width, int height) {
     root->renderer = SDL_CreateRenderer(root->window, -1, SDL_RENDERER_ACCELERATED);
     
     root->frame = malloc(sizeof(cwgFrame));
+    root->frame->width = width;
+    root->frame->height = height;
     root->frame->background = malloc(sizeof(SDL_Rect));
     root->frame->background->x = 0;
     root->frame->background->y = 0;
@@ -64,19 +67,6 @@ cwgRootFrame *cwgRootInit(char *title, int width, int height) {
 
 cwgFrame *cwgCreateFrame(int width, int height) {
     cwgFrame *result = malloc(sizeof(cwgFrame));
-    if (width) {
-        result->width = width;
-        result->autowidth = 0;
-    } else {
-        result->autowidth = 1;
-    }
-
-    if (height) {
-        result->height = height;
-        result->autoheight = 0;
-    } else {
-        result->autoheight = 1;
-    }
 
     result->background = malloc(sizeof(SDL_Rect));
     result->children = NULL;
@@ -88,44 +78,78 @@ cwgFrame *cwgCreateFrame(int width, int height) {
     result->color->b = CWG_DEFAULT_COLOR_RGB;
     result->color->a = SDL_ALPHA_OPAQUE;
     
+    if (width) {
+        result->width = width;
+        result->background->w = width;
+        result->autowidth = 0;
+    } else {
+        result->autowidth = 1;
+        result->background->w = 0;
+        result->width = 0;
+    }
+
+    if (height) {
+        result->height = height;
+        result->autoheight = 0;
+    } else {
+        result->autoheight = 1;
+    }
+
     return result;
 }
 
-void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column) {
-    int x = 0, y = 0;
+void cwgReplaceFrames(cwgFrame *root) {
+    int freespace = root->width;
+    int autoChildren = 0;
+    int autoSpace;
+    int takenX = 0;
 
-    if (rootFrame->childrenCount == 0) {
-        x = 0;
-    } else if (row > rootFrame->childrenCount) {
-            x += rootFrame->children[rootFrame->childrenCount - 1]->x;
-            x += rootFrame->children[rootFrame->childrenCount - 1]->width;
-    } else {
-        for (size_t i=0; i<row-1; ++i) {
-            x += rootFrame->children[i]->width;
+    for (size_t i = 0; i<root->childrenCount; ++i) {
+        if (root->children[i]->autowidth) {
+            autoChildren++;
+        } else {
+            freespace -= root->children[i]->width;
         }
     }
 
-    newFrame->row = row;
-    newFrame->column = column;
-    newFrame->x = x;
-    newFrame->y = 0;
+    if (autoChildren) {
+        autoSpace = freespace / autoChildren;
+    } else {
+        autoSpace = freespace;
+    }
 
-    newFrame->background->x = newFrame->x;
-    newFrame->background->y = newFrame->y;
-    newFrame->background->w = newFrame->width;
-    newFrame->background->h = newFrame->height;
+    for (size_t i = 0; i<root->childrenCount; ++i) {
+        root->children[i]->x = takenX;
+        root->children[i]->background->x = takenX;
+        if (root->children[i]->autowidth) {
+            root->children[i]->width = autoSpace;
+            root->children[i]->background->w = autoSpace;
+            takenX += autoSpace;
+        } else {
+            takenX += root->children[i]->width;
+        }
+    }
 
+}
 
+void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column) {
     rootFrame->childrenCount++;
     rootFrame->children = realloc(rootFrame->children, (rootFrame->childrenCount) * sizeof(cwgFrame*));
     rootFrame->children[rootFrame->childrenCount - 1] = newFrame;
+
+    cwgReplaceFrames(rootFrame);
+    
+
+    newFrame->row = row;
+    newFrame->column = column;
+
+    newFrame->y = 0;
+    newFrame->background->y = newFrame->y;;
+    newFrame->background->h = newFrame->height;
 }
 
 void cwgUpdateRoot(cwgRootFrame *root) {
     for (size_t i=0; i<(root->frame->childrenCount); ++i) {
-
-        // printf("%d\n", root->frame->children[i].width);
-
         SDL_SetRenderDrawColor(
             root->renderer,
             root->frame->children[i]->color->r,
@@ -134,6 +158,6 @@ void cwgUpdateRoot(cwgRootFrame *root) {
             root->frame->children[i]->color->a
         );
         SDL_RenderFillRect(root->renderer, root->frame->children[i]->background);
-        SDL_RenderPresent(root->renderer);
     }
+    SDL_RenderPresent(root->renderer);
 }
