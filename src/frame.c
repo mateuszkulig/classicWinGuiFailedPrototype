@@ -96,10 +96,9 @@ void cwgPlaceFrame(cwgFrame *newFrame, cwgFrame *rootFrame, int row, int column)
 
     if (rootFrame->childrenCount == 0) {
         x = 0;
-    // } else if (row > rootFrame->childrenCount) {
-    //         printf("got in the loop\n");
-    //         x += rootFrame->children[rootFrame->childrenCount - 1]->x;
-    //         x += rootFrame->children[rootFrame->childrenCount - 1]->width;
+    } else if (row > rootFrame->childrenCount) {
+            x += rootFrame->children[rootFrame->childrenCount - 1]->x;
+            x += rootFrame->children[rootFrame->childrenCount - 1]->width;
     } else {
         for (size_t i=0; i<row-1; ++i) {
             x += rootFrame->children[i]->width;
